@@ -15,6 +15,7 @@ namespace ActionTimeline
     public class Plugin : IDalamudPlugin
     {
         public static IClientState ClientState { get; private set; } = null!;
+        public static IObjectTable ObjectTable { get; private set; } = null!;
         public static ICommandManager CommandManager { get; private set; } = null!;
         public static IDalamudPluginInterface PluginInterface { get; private set; } = null!;
         public static ICondition Condition { get; private set; } = null!;
@@ -45,6 +46,7 @@ namespace ActionTimeline
 
         public Plugin(
             IClientState clientState,
+            IObjectTable objectTable,
             ICommandManager commandManager,
             IDalamudPluginInterface pluginInterface,
             ICondition condition,
@@ -59,6 +61,7 @@ namespace ActionTimeline
         )
         {
             ClientState = clientState;
+            ObjectTable = objectTable;
             CommandManager = commandManager;
             PluginInterface = pluginInterface;
             Condition = condition;
@@ -81,7 +84,7 @@ namespace ActionTimeline
                 AssemblyLocation = Assembly.GetExecutingAssembly().Location;
             }
 
-            Version = Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "1.7.0.0";
+            Version = Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "1.8.0.0";
 
             UiBuilder.Draw += Draw;
             UiBuilder.OpenConfigUi += OpenConfigUi;
@@ -162,7 +165,7 @@ namespace ActionTimeline
 
         private void Draw()
         {
-            if (Settings == null || ClientState.LocalPlayer == null) return;
+            if (Settings == null || ObjectTable.LocalPlayer == null) return;
 
             UpdateTimeline();
             UpdateRotation();
